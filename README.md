@@ -22,3 +22,4 @@ npm start
 - Form handling: Don't forget to add the name and value props in each TextField for the onChange
 - Graphql mutation: Make sure the casing matches with the api specs and input to properly to avoid connection issues; else you get 400 error
 - Password validation was buggy; Confirm validators are taking the correct input
+- In SignupPage, addUser doesn't exist yet for useForm to use, so we use wrap it in a function registerUser() because in Javascript, 'function's are ran first

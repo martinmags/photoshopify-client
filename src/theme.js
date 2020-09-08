@@ -17,7 +17,7 @@ export let theme = createMuiTheme({
   // TODO: Add responsiveFontSizes() once grid is implemented
   typography: {
     fontFamily: "Poppins, sans-serif",
-    fontSize: 30,
+    fontSize: 16,
     h1: {
       fontSize: "4rem",
       fontWeight: "bold",

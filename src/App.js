@@ -7,10 +7,13 @@ import HomePage from "./templates/HomePage";
 import GalleryPage from "./templates/GalleryPage";
 import SignupPage from "./templates/SignupPage";
 import LoginPage from "./templates/LoginPage";
+import { AuthProvider } from "./context/auth";
+import ProtectedRoute from "./util/ProtectedRoute";
+import PublicRoute from "./util/PublicRoute";
 
 function App() {
   return (
-    <div className="App">
+    <AuthProvider>
       <ThemeProvider theme={theme}>
         {/* <CssBaseline /> */}
         <Router>
@@ -19,14 +22,14 @@ function App() {
             {/* Public */}
             <Route exact path="/" component={HomePage} />
             {/* Don't allow access if already Logged In */}
-            <Route exact path="/signup" component={SignupPage} />
-            <Route exact path="/login" component={LoginPage} />
-            {/* Protected */}
-            <Route exact path="/gallery" component={GalleryPage} />
+            <PublicRoute exact path="/signup" component={SignupPage} />
+            <PublicRoute exact path="/login" component={LoginPage} />
+            {/* Protected: Access only if authenticated/logged in */}
+            <ProtectedRoute exact path="/gallery" component={GalleryPage} />
           </Switch>
         </Router>
       </ThemeProvider>
-    </div>
+    </AuthProvider>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Grid } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
@@ -6,6 +6,8 @@ import Button from "@material-ui/core/Button";
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/client";
 import { makeStyles } from "@material-ui/core/styles";
+import { useForm } from "../util/hooks";
+import { AuthContext } from "../context/auth";
 
 const useStyles = makeStyles((theme) => ({
   marginBottom5: {
@@ -15,9 +17,10 @@ const useStyles = makeStyles((theme) => ({
 
 function SignupPage(props) {
   const classes = useStyles();
-
+  const context = useContext(AuthContext);
   const [errors, setErrors] = useState({});
-  const [values, setValues] = useState({
+
+  const { onChange, onSubmit, values } = useForm(registerUser, {
     username: "",
     email: "",
     password: "",
@@ -26,26 +29,20 @@ function SignupPage(props) {
     lastname: "",
   });
 
-  const onChange = (event) => {
-    setValues({ ...values, [event.target.name]: event.target.value });
-  };
-
   const [addUser, { loading }] = useMutation(REGISTER_USER, {
-    update(_, result) {
-      console.log(result);
+    update(_, { data: { registerUser: userData } }) {
+      context.login(userData);
       props.history.push("/");
     },
     onError(err) {
-      console.log(err.graphQLErrors[0].extensions.exception.errors);
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
     },
     variables: values,
   });
 
-  const onSubmit = (event) => {
-    event.preventDefault();
+  function registerUser() {
     addUser();
-  };
+  }
 
   return (
     <div>
