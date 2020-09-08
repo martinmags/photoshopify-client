@@ -15,3 +15,10 @@ npm start
 - [ ] Authenticated users will be able to move around photos in their page.
 - [ ] NEXT: Authenticated users will be able to like photos.
 - [ ] LOW: Authenticated users will be able to follow photographers.
+- [ ] LOW: Separate Register page to a 3 step horizontal stepper.
+
+# Debugging:
+
+- Form handling: Don't forget to add the name and value props in each TextField for the onChange
+- Graphql mutation: Make sure the casing matches with the api specs and input to properly to avoid connection issues; else you get 400 error
+- Password validation was buggy; Confirm validators are taking the correct input

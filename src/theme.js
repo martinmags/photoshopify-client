@@ -39,6 +39,8 @@ export let theme = createMuiTheme({
     body1: {
       fontSize: "1rem",
     },
+    body2: "body1",
+    caption: "body1",
     button: {
       fontSize: "1rem",
       textTransform: "none",
