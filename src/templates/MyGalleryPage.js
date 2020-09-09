@@ -1,5 +1,5 @@
 // TODO: Add authenticated functionalities
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
@@ -11,7 +11,8 @@ import GridListTileBar from "@material-ui/core/GridListTileBar";
 import gql from "graphql-tag";
 import { theme } from "../theme";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import { useParams } from "react-router-dom";
+import { AuthContext } from "../context/auth";
+import UploadPhoto from "../components/UploadPhoto";
 
 const useStyles = makeStyles((theme) => ({
   horizontal: {
@@ -40,8 +41,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function GalleryPage() {
+function MyGalleryPage() {
   const classes = useStyles();
+  const { user } = useContext(AuthContext);
 
   /* Responsive GridList */
   const [width, setWidth] = useState(window.innerWidth);
@@ -66,10 +68,11 @@ function GalleryPage() {
     return 1;
   };
 
-  // Fetch params:username's photo gallery
-  const { username } = useParams();
+  // TODO: Allow users to edit, add, remove photos to their page
+  let upload_content = user ? <UploadPhoto /> : null;
+
   const { loading, data } = useQuery(FETCH_OWN_PHOTOS_QUERY, {
-    variables: { username: username },
+    variables: { username: user.username },
   });
 
   let gallery_content = null;
@@ -83,6 +86,7 @@ function GalleryPage() {
 
   if (data) {
     const { photosByUsername: photos } = data;
+    console.log(data);
 
     gallery_content = photos.map((photo) => (
       <GridListTile key={photo.id}>
@@ -110,8 +114,9 @@ function GalleryPage() {
         className={classes.marginBottom5}
       >
         <Grid item xs={11} className={classes.marginBottom5}>
-          <Typography variant="h1">{username}</Typography>
+          <Typography variant="h1">{user.username}</Typography>
         </Grid>
+        {upload_content}
         <Grid item xs={11}>
           <hr className={classes.horizontal} />
         </Grid>
@@ -142,4 +147,4 @@ const FETCH_OWN_PHOTOS_QUERY = gql`
   }
 `;
 
-export default GalleryPage;
+export default MyGalleryPage;

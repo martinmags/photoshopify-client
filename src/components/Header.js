@@ -8,7 +8,6 @@ import Typography from "@material-ui/core/Typography";
 import SearchBar from "./SearchBar";
 import { AuthContext } from "../context/auth";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
-// import MenuBar from "../components/MenuBar";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import AccountCircle from "@material-ui/icons/AccountCircle";
@@ -31,21 +30,15 @@ const useStyles = makeStyles((theme) => ({
   navBarButtons: {
     textAlign: "right",
   },
+  input: {
+    display: "none",
+  },
 }));
 
 function Header(props) {
   const classes = useStyles();
   const { user, logout } = useContext(AuthContext);
 
-  // Hacky workaround the need to refresh to show data
-  let username = "";
-  if (user) {
-    if (user.user) {
-      username = user.user.username;
-    } else {
-      username = user.username;
-    }
-  }
   // Handle menu state
   const [anchorEl, setAnchorEl] = useState(null);
   const handleClick = (event) => {
@@ -85,19 +78,20 @@ function Header(props) {
         <Grid container item xs={8} justify="flex-end">
           {/* Search Feature */}
           <SearchBar />
+          {/* Link to UploadPage */}
           <Button
-            variant="contained"
-            color="primary"
-            className={classes.buttonColor}
             size="small"
-            startIcon={<PhotoCamera fontSize="small" />}
+            component={RouterLink}
+            to="/upload"
+            color="primary"
           >
-            Upload
+            <PhotoCamera />
           </Button>
           {/* LoggedIn NavBar */}
           <Button size="small" onClick={handleClick} color="primary">
             <AccountCircle />
           </Button>
+
           <Menu
             anchorEl={anchorEl}
             keepMounted
@@ -110,11 +104,7 @@ function Header(props) {
               </Link>
             </MenuItem>
             <MenuItem onClick={handleClose}>
-              <Link
-                color="secondary"
-                component={RouterLink}
-                to={`/gallery/${username}`}
-              >
+              <Link color="secondary" component={RouterLink} to={`/MyGallery`}>
                 My Gallery
               </Link>
             </MenuItem>

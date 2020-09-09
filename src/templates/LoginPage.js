@@ -27,9 +27,8 @@ function LoginPage(props) {
 
   const [loginUser, { loading }] = useMutation(LOGIN_USER, {
     update(_, { data: { loginUser: userData } }) {
-      console.log(userData);
       context.login(userData);
-      props.history.push(`/gallery/${userData.user.username}`);
+      props.history.push(`/mygallery`);
     },
     onError(err) {
       console.log(err.graphQLErrors[0].extensions.exception.errors);
