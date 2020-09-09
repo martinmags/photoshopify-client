@@ -1,3 +1,4 @@
+require("dotenv").config();
 import React from "react";
 import App from "./App";
 import ReactDOM from "react-dom";
@@ -7,7 +8,7 @@ import { setContext } from "apollo-link-context";
 import { createHttpLink } from "apollo-link-http";
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:4000/graphql",
+  uri: process.env.SERVER_URI || "http://localhost:4000/graphql",
 });
 const authLink = setContext((req, res) => {
   const token = localStorage.getItem("jwtToken");
