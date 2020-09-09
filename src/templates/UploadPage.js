@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import gql from "graphql-tag";
-import { FETCH_PHOTOS_QUERY } from "../util/graphql";
+// import { FETCH_PHOTOS_QUERY } from "../util/graphql";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
-import IconButton from "@material-ui/core/IconButton";
+// import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
