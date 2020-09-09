@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
+// TODO: Add authenticated functionalities
+import React, { useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
@@ -10,7 +11,8 @@ import GridListTileBar from "@material-ui/core/GridListTileBar";
 import gql from "graphql-tag";
 import { theme } from "../theme";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import { AuthContext } from "../context/auth";
+// import { AuthContext } from "../context/auth";
+import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   horizontal: {
@@ -67,10 +69,13 @@ function GalleryPage() {
   };
 
   // Public Gallery Content
-  const { user } = useContext(AuthContext);
-  // Fetch own photo gallery
+  // const { user: authUser } = useContext(AuthContext);
+  // TODO: Allow users to edit, add, remove photos to their page
+
+  // Fetch params:username's photo gallery
+  const { username } = useParams();
   const { loading, data } = useQuery(FETCH_OWN_PHOTOS_QUERY, {
-    variables: { username: user.username },
+    variables: { username: username },
   });
 
   let gallery_content = null;
@@ -84,7 +89,7 @@ function GalleryPage() {
 
   if (data) {
     const { photosByUsername: photos } = data;
-    console.log(photos);
+
     gallery_content = photos.map((photo) => (
       <GridListTile key={photo.id}>
         <img
@@ -111,7 +116,7 @@ function GalleryPage() {
         className={classes.marginBottom5}
       >
         <Grid item xs={11} className={classes.marginBottom5}>
-          <Typography variant="h1">{user.username}</Typography>
+          <Typography variant="h1">{username}</Typography>
         </Grid>
         <Grid item xs={11}>
           <hr className={classes.horizontal} />
@@ -138,6 +143,7 @@ const FETCH_OWN_PHOTOS_QUERY = gql`
       likes
       filepath
       id
+      username
     }
   }
 `;

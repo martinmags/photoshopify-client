@@ -6,10 +6,11 @@ import MenuItem from "@material-ui/core/MenuItem";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { Link as RouterLink } from "react-router-dom";
 import Link from "@material-ui/core/Link";
+import { Redirect } from "react-router-dom";
 
-function MenuBar() {
+function MenuBar(props) {
   const { logout } = useContext(AuthContext);
-
+  console.log(props.user.username);
   // Handle menu state
   const [anchorEl, setAnchorEl] = useState(null);
   const handleClick = (event) => {
@@ -37,7 +38,7 @@ function MenuBar() {
         </MenuItem>
 
         <MenuItem>
-          <Link color="secondary" component={RouterLink} to="/gallery">
+          <Link color="secondary" component={RouterLink} to={`/gallery/y0h0n`}>
             My Gallery
           </Link>
         </MenuItem>

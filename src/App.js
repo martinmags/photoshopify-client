@@ -8,7 +8,7 @@ import GalleryPage from "./templates/GalleryPage";
 import SignupPage from "./templates/SignupPage";
 import LoginPage from "./templates/LoginPage";
 import { AuthProvider } from "./context/auth";
-import ProtectedRoute from "./util/ProtectedRoute";
+// import ProtectedRoute from "./util/ProtectedRoute";
 import PublicRoute from "./util/PublicRoute";
 
 function App() {
@@ -25,7 +25,7 @@ function App() {
             <PublicRoute exact path="/signup" component={SignupPage} />
             <PublicRoute exact path="/login" component={LoginPage} />
             {/* Protected: Access only if authenticated/logged in */}
-            <ProtectedRoute exact path="/gallery" component={GalleryPage} />
+            <Route exact path="/gallery/:username" component={GalleryPage} />
           </Switch>
         </Router>
       </ThemeProvider>

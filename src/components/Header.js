@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -8,7 +8,10 @@ import Typography from "@material-ui/core/Typography";
 import SearchBar from "./SearchBar";
 import { AuthContext } from "../context/auth";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
-import MenuBar from "../components/MenuBar";
+// import MenuBar from "../components/MenuBar";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import AccountCircle from "@material-ui/icons/AccountCircle";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -32,7 +35,29 @@ const useStyles = makeStyles((theme) => ({
 
 function Header(props) {
   const classes = useStyles();
-  const { user } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
+
+  // Hacky workaround the need to refresh to show data
+  let username = "";
+  if (user) {
+    if (user.user) {
+      username = user.user.username;
+    } else {
+      username = user.username;
+    }
+  }
+  // Handle menu state
+  const [anchorEl, setAnchorEl] = useState(null);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = (event) => {
+    setAnchorEl(null);
+  };
+  const handleLogout = (event) => {
+    handleClose();
+    logout();
+  };
 
   // Dynamically display content based on user log in state
   const header = user ? (
@@ -63,15 +88,38 @@ function Header(props) {
           <Button
             variant="contained"
             color="primary"
-            component={RouterLink}
             className={classes.buttonColor}
             size="small"
-            to="/login"
             startIcon={<PhotoCamera fontSize="small" />}
           >
             Upload
           </Button>
-          <MenuBar />
+          {/* LoggedIn NavBar */}
+          <Button size="small" onClick={handleClick} color="primary">
+            <AccountCircle />
+          </Button>
+          <Menu
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={handleClose}>
+              <Link color="secondary" component={RouterLink} to="/">
+                Home
+              </Link>
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <Link
+                color="secondary"
+                component={RouterLink}
+                to={`/gallery/${username}`}
+              >
+                My Gallery
+              </Link>
+            </MenuItem>
+            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          </Menu>
         </Grid>
       </Grid>
     </div>

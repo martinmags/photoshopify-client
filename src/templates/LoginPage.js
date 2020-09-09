@@ -29,7 +29,7 @@ function LoginPage(props) {
     update(_, { data: { loginUser: userData } }) {
       console.log(userData);
       context.login(userData);
-      props.history.push("/");
+      props.history.push(`/gallery/${userData.user.username}`);
     },
     onError(err) {
       console.log(err.graphQLErrors[0].extensions.exception.errors);
