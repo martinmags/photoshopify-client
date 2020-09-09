@@ -63,7 +63,7 @@ function UploadPage(props) {
       <Grid container direction="column" justify="center" alignContent="center">
         <Grid item>
           {uploaded === "" ? (
-            <Typography>Upload</Typography>
+            <Typography variant="h3">Upload</Typography>
           ) : (
             <Typography>{uploaded}</Typography>
           )}
