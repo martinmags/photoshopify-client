@@ -7,9 +7,8 @@ import { setContext } from "apollo-link-context";
 import { createHttpLink } from "apollo-link-http";
 
 // const dev = "http://localhost:4000/graphql";
-const prod = "https://server-photoshopify.herokuapp.com/";
 const httpLink = createHttpLink({
-  uri: prod,
+  uri: "https://server-photoshopify.herokuapp.com/graphql",
 });
 const authLink = setContext((req, res) => {
   const token = localStorage.getItem("jwtToken");
