@@ -1,4 +1,3 @@
-require("dotenv").config();
 import React from "react";
 import App from "./App";
 import ReactDOM from "react-dom";
@@ -7,8 +6,10 @@ import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import { setContext } from "apollo-link-context";
 import { createHttpLink } from "apollo-link-http";
 
+// const dev = "http://localhost:4000/graphql";
+const prod = "https://server-photoshopify.herokuapp.com/";
 const httpLink = createHttpLink({
-  uri: process.env.SERVER_URI || "http://localhost:4000/graphql",
+  uri: prod,
 });
 const authLink = setContext((req, res) => {
   const token = localStorage.getItem("jwtToken");

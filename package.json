@@ -15,7 +15,6 @@
     "apollo-link-context": "^1.0.20",
     "apollo-link-http": "^1.5.17",
     "cloudinary-react": "^1.6.6",
-    "dotenv": "^8.2.0",
     "graphql": "^15.3.0",
     "graphql-tag": "^2.11.0",
     "jwt-decode": "^3.0.0-beta.2",
