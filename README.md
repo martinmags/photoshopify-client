@@ -25,3 +25,4 @@ npm start
 - Password validation was buggy; Confirm validators are taking the correct input
 - In SignupPage, addUser doesn't exist yet for useForm to use, so we use wrap it in a function registerUser() because in Javascript, 'function's are ran first
 - After initial login, heading to own gallery page doesn't show appropriate photos until refresh; possible solution is to use <Redirect>
+- Issue: Authorization header must be provided; Solution: npm install apollo-link-context

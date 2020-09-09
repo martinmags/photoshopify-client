@@ -104,7 +104,7 @@ function Header(props) {
               </Link>
             </MenuItem>
             <MenuItem onClick={handleClose}>
-              <Link color="secondary" component={RouterLink} to={`/MyGallery`}>
+              <Link color="secondary" component={RouterLink} to={`/mygallery`}>
                 My Gallery
               </Link>
             </MenuItem>

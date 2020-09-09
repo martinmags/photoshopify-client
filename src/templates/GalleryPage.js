@@ -7,11 +7,10 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { useQuery } from "@apollo/react-hooks";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
-import GridListTileBar from "@material-ui/core/GridListTileBar";
 import gql from "graphql-tag";
 import { theme } from "../theme";
-import FavoriteIcon from "@material-ui/icons/Favorite";
 import { useParams } from "react-router-dom";
+import { Image } from "cloudinary-react";
 
 const useStyles = makeStyles((theme) => ({
   horizontal: {
@@ -86,16 +85,12 @@ function GalleryPage() {
 
     gallery_content = photos.map((photo) => (
       <GridListTile key={photo.id}>
-        <img
-          className={classes.image}
-          src={photo.filepath}
+        <Image
+          cloudName="martinmags"
+          publicId={photo.filepublicid}
           alt={photo.username}
-        />
-        <GridListTileBar
-          subtitle={
-            <Typography variant="body1">Like(s): {photo.likes}</Typography>
-          }
-          actionIcon={<FavoriteIcon fontSize="small" color="primary" />}
+          height="200"
+          crop="scale"
         />
       </GridListTile>
     ));
@@ -135,7 +130,7 @@ const FETCH_OWN_PHOTOS_QUERY = gql`
   query photosByUsername($username: String!) {
     photosByUsername(username: $username) {
       likes
-      filepath
+      filepublicid
       id
       username
     }

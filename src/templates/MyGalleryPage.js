@@ -7,12 +7,10 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { useQuery } from "@apollo/react-hooks";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
-import GridListTileBar from "@material-ui/core/GridListTileBar";
-import gql from "graphql-tag";
 import { theme } from "../theme";
-import FavoriteIcon from "@material-ui/icons/Favorite";
 import { AuthContext } from "../context/auth";
-import UploadPhoto from "../components/UploadPhoto";
+import { Image } from "cloudinary-react";
+import { FETCH_OWN_PHOTOS_QUERY } from "../util/graphql";
 
 const useStyles = makeStyles((theme) => ({
   horizontal: {
@@ -69,41 +67,36 @@ function MyGalleryPage() {
   };
 
   // TODO: Allow users to edit, add, remove photos to their page
-  let upload_content = user ? <UploadPhoto /> : null;
+  let username = "";
+  if (user) {
+    if (user.user) {
+      username = user.user.username;
+    } else {
+      username = user.username;
+    }
+  }
 
-  const { loading, data } = useQuery(FETCH_OWN_PHOTOS_QUERY, {
-    variables: { username: user.username },
+  const { data } = useQuery(FETCH_OWN_PHOTOS_QUERY, {
+    variables: { username },
   });
 
-  let gallery_content = null;
-  if (loading) {
-    gallery_content = (
-      <Grid item xs={3} style={{ textAlign: "center" }}>
-        <CircularProgress />
-      </Grid>
-    );
-  }
-
-  if (data) {
-    const { photosByUsername: photos } = data;
-    console.log(data);
-
-    gallery_content = photos.map((photo) => (
-      <GridListTile key={photo.id}>
-        <img
-          className={classes.image}
-          src={photo.filepath}
+  const gallery_content = data ? (
+    data.photosByUsername.map((photo) => (
+      <GridListTile key={photo.id} justify="center">
+        <Image
+          cloudName="martinmags"
+          publicId={photo.filepublicid}
           alt={photo.username}
-        />
-        <GridListTileBar
-          subtitle={
-            <Typography variant="body1">Like(s): {photo.likes}</Typography>
-          }
-          actionIcon={<FavoriteIcon fontSize="small" color="primary" />}
+          height="200"
+          crop="scale"
         />
       </GridListTile>
-    ));
-  }
+    ))
+  ) : (
+    <Grid item>
+      <CircularProgress />
+    </Grid>
+  );
 
   return (
     <div>
@@ -114,9 +107,8 @@ function MyGalleryPage() {
         className={classes.marginBottom5}
       >
         <Grid item xs={11} className={classes.marginBottom5}>
-          <Typography variant="h1">{user.username}</Typography>
+          <Typography variant="h1">{username}</Typography>
         </Grid>
-        {upload_content}
         <Grid item xs={11}>
           <hr className={classes.horizontal} />
         </Grid>
@@ -135,16 +127,5 @@ function MyGalleryPage() {
     </div>
   );
 }
-
-const FETCH_OWN_PHOTOS_QUERY = gql`
-  query photosByUsername($username: String!) {
-    photosByUsername(username: $username) {
-      likes
-      filepath
-      id
-      username
-    }
-  }
-`;
 
 export default MyGalleryPage;

@@ -1,0 +1,71 @@
+const [errors, setErrors] = useState({});
+  const [fileInputState, setFileInputState] = useState("");
+  const [previewSource, setPreviewSource] = useState("");
+  const [selectedFile, setSelectedFile] = useState("");
+  // const [successMsg, setSuccesMsg] = useState("");
+  const [errMsg, setErrMsg] = useState("");
+
+  const handleFileInputChange = (e) => {
+    const file = e.target.files[0];
+    previewFile(file);
+    setSelectedFile(file);
+    setFileInputState(e.target.value);
+  };
+  const previewFile = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setPreviewSource(reader.result);
+    };
+  };
+
+  const handleSubmitFile = (e) => {
+    e.preventDefault();
+    if (!selectedFile) return;
+    const reader = new FileReader();
+    reader.readAsDataURL(selectedFile);
+    reader.onloadend = () => {
+      uploadImage(reader.result);
+    };
+    reader.onerror = () => {
+      console.error("ERROR");
+      setErrMsg("Something went wrong");
+    };
+  };
+
+  const [addPhoto, { data }] = useMutation(ADD_PHOTO);
+  const uploadImage = async (base64EncodedImage) => {
+    try {
+      console.log(base64EncodedImage);
+      addPhoto({
+        variables: {
+          fileStr: base64EncodedImage,
+        },
+      });
+      // useMutation
+      // await fetch("/api/upload", {
+      //   method: "POST",
+      //   body: JSON.stringify({ data: base64EncodedImage }),
+      //   headers: { "Content-type": "application/json" },
+      // });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  return (
+    <div>
+      <h1>Upload</h1>
+      <form onSubmit={handleSubmitFile}>
+        <input
+          type="file"
+          name="image"
+          onChange={handleFileInputChange}
+          value={fileInputState}
+        />
+        <button type="submit">Submit</button>
+      </form>
+      {previewSource && (
+        <img src={previewSource} alt="chosen" style={{ height: "300px" }} />
+      )}
+    </div>
+  );

@@ -6,11 +6,9 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { useQuery } from "@apollo/react-hooks";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
-import GridListTileBar from "@material-ui/core/GridListTileBar";
-import gql from "graphql-tag";
 import { theme } from "../theme";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import IconButton from "@material-ui/core/IconButton";
+import { Image } from "cloudinary-react";
+import { FETCH_PHOTOS_QUERY, FETCH_USERS_QUERY } from "../util/graphql";
 
 const useStyles = makeStyles((theme) => ({
   horizontal: {
@@ -20,10 +18,6 @@ const useStyles = makeStyles((theme) => ({
   gridList: {
     width: "90vw",
     height: "auto",
-  },
-  image: {
-    height: 300,
-    overflow: "hidden",
   },
   gallery: {
     display: "flex",
@@ -41,10 +35,6 @@ const useStyles = makeStyles((theme) => ({
 
 function HomePage() {
   const classes = useStyles();
-
-  function likePhoto() {
-    console.log("Like Post");
-  }
 
   // Responsive GridList
   const [width, setWidth] = useState(window.innerWidth);
@@ -69,9 +59,20 @@ function HomePage() {
     return 1;
   };
 
-  const { loading, data } = useQuery(FETCH_PHOTOS_QUERY);
+  // Registered Users List
+  let users_list = null;
+  const { data: usersList } = useQuery(FETCH_USERS_QUERY);
+  if (usersList) {
+    const { users } = usersList;
+    users_list = users.map((user) => (
+      <Grid key={user.id} item>
+        <li>{user.username}</li>
+      </Grid>
+    ));
+  }
 
   // Public Gallery Content
+  const { loading, data } = useQuery(FETCH_PHOTOS_QUERY);
   let gallery_content = null;
   if (loading) {
     gallery_content = (
@@ -85,21 +86,12 @@ function HomePage() {
     const { photos } = data;
     gallery_content = photos.map((photo) => (
       <GridListTile key={photo.id}>
-        <img
-          className={classes.image}
-          src={photo.filepath}
+        <Image
+          cloudName="martinmags"
+          publicId={photo.filepublicid}
           alt={photo.username}
-        />
-        <GridListTileBar
-          title={<Typography variant="body1">{photo.username}</Typography>}
-          subtitle={
-            <Typography variant="body1">Like(s): {photo.likes}</Typography>
-          }
-          actionIcon={
-            <IconButton onClick={likePhoto}>
-              <FavoriteIcon fontSize="small" color="primary" />
-            </IconButton>
-          }
+          height="200"
+          crop="scale"
         />
       </GridListTile>
     ));
@@ -122,6 +114,15 @@ function HomePage() {
           <hr className={classes.horizontal} />
         </Grid>
       </Grid>
+      <div>
+        <Grid container direction="column" justify="center" alignItems="center">
+          <Grid item>
+            <Typography variant="h3">Registered Users</Typography>
+          </Grid>
+
+          <ul>{users_list}</ul>
+        </Grid>
+      </div>
       {/* Gallery */}
       <div className={classes.gallery}>
         <GridList
@@ -136,16 +137,5 @@ function HomePage() {
     </div>
   );
 }
-
-const FETCH_PHOTOS_QUERY = gql`
-  query {
-    photos {
-      username
-      id
-      likes
-      filepath
-    }
-  }
-`;
 
 export default HomePage;
