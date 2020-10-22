@@ -8,9 +8,13 @@ import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import { theme } from "../theme";
 import { Image } from "cloudinary-react";
-import { FETCH_PHOTOS_QUERY, FETCH_USERS_QUERY } from "../util/graphql";
+import { FETCH_PHOTOS_QUERY /*FETCH_USERS_QUERY*/ } from "../util/graphql";
 
 const useStyles = makeStyles((theme) => ({
+  image: {
+    width: "100%",
+    objectFit: "cover",
+  },
   horizontal: {
     height: "2px",
     backgroundColor: "#000",
@@ -60,16 +64,16 @@ function HomePage() {
   };
 
   // Registered Users List
-  let users_list = null;
-  const { data: usersList } = useQuery(FETCH_USERS_QUERY);
-  if (usersList) {
-    const { users } = usersList;
-    users_list = users.map((user) => (
-      <Grid key={user.id} item>
-        <li>{user.username}</li>
-      </Grid>
-    ));
-  }
+  // let users_list = null;
+  // const { data: usersList } = useQuery(FETCH_USERS_QUERY);
+  // if (usersList) {
+  //   const { users } = usersList;
+  //   users_list = users.map((user) => (
+  //     <Grid key={user.id} item>
+  //       <li>{user.username}</li>
+  //     </Grid>
+  //   ));
+  // }
 
   // Public Gallery Content
   const { loading, data } = useQuery(FETCH_PHOTOS_QUERY);
@@ -92,6 +96,7 @@ function HomePage() {
           alt={photo.username}
           height="200"
           crop="scale"
+          className={classes.image}
         />
       </GridListTile>
     ));
@@ -114,7 +119,8 @@ function HomePage() {
           <hr className={classes.horizontal} />
         </Grid>
       </Grid>
-      <div>
+      {/* Registered Users */}
+      {/* <div>
         <Grid container direction="column" justify="center" alignItems="center">
           <Grid item>
             <Typography variant="h3">Registered Users</Typography>
@@ -122,7 +128,7 @@ function HomePage() {
 
           <ul>{users_list}</ul>
         </Grid>
-      </div>
+      </div> */}
       {/* Gallery */}
       <div className={classes.gallery}>
         <GridList
